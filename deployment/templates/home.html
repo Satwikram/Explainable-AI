@@ -1,12 +1,21 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Detect</title>
+    <link rel="stylesheet" href="{% static 'css/materialize.css' %}">
+
 </head>
 <body>
 
-<h1>Success!</h1>
+<h2>Upload Image</h2>
 
+<form action = 'predict' method = "post" enctype = "multipart/form-data">
+{% csrf_token %}
+<input type = 'file' name = 'scene'>
+<button type = 'submit'>Upload Image</button>
+
+</form>
 </body>
 </html>
