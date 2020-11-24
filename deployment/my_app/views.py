@@ -1,8 +1,9 @@
 from PIL.Image import Image
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,42 +15,35 @@ def home(request):
     return render(request, 'home.html')
 
 def predict(request):
+
     if request.method == 'POST':
 
-        try:
-            image = request.FILES['scene']
-            print("image.name")
-            folder = 'media/images/'
-            print("The Type is:",type(image))
+        image = request.FILES['scene']
+        folder = 'media/images/'
+        print("The Type is:",type(image))
+        fileName, fileExtension = os.path.splitext(image.name)
+        print(fileName)
+        extension = ['.png', '.jpg']
+        print(extension)
 
-            try:
-                im = Image.open(image.name)
-                print("Image Read")
-                if im.format not in ('BMP', 'PNG', 'JPEG'):
-                    raise ValidationError("Unsupport image type. Please upload bmp, png or jpeg")
-                    messages.info(request, "Please upload an Image Type of Png or Jpg")
+        if fileExtension not in extension:
+            print("Am in If",fileExtension)
+            messages.info(request, "The patient condition is: Pneumonia")
+            return redirect("predict")
 
-            except Exception as e:
-                print("The Error is:",e)
+        filename = str(image.name)
 
-            filename = str(image.name)
+        media_path = folder+filename
+        print(media_path)
 
-            media_path = folder+filename
-            print(media_path)
+        prediction = 2
 
-            prediction = 2
+        print("worked")
+        data = {"image_path": media_path, "prediction": prediction}
 
-            print("worked")
-            data = {"image_path": media_path, "prediction": prediction}
+        return render(request, 'results.html', {'data': data})
 
-            return render(request, 'results.html', {'data': data})
-
-        except Exception as e:
-            print('The Error is',e)
-
-    return HttpResponse("Failed")
-
-
+    return render(request, "home.html")
 
 class PredictAPIView(APIView):
 
