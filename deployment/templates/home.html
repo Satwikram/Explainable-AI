@@ -13,7 +13,7 @@
 
 <form action = 'predict' method = "post" enctype = "multipart/form-data">
 {% csrf_token %}
-<input type = 'file' name = 'scene'>
+ <input type = 'file' name = 'scene' required>
 <button type = 'submit'>Upload Image</button>
 
 </form>
