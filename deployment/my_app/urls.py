@@ -9,11 +9,12 @@ from deployment import settings
 urlpatterns = [
                 # Django URLS
                 path('', views.home, name = 'home'),
+                path('predict', views.predict, name = 'predict'),
 
 
 
                 # Rest URLS
-                path('predict', PredictAPIView.as_view()),
+                path('PredictAPI', PredictAPIView.as_view()),
 
 ]
 if settings.DEBUG:
